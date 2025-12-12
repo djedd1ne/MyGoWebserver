@@ -2,4 +2,4 @@ FROM postgres:15-alpine
 
 COPY init.sql /docker-entrypoint-initdb.d/
 
-EXPOSE 6543
+EXPOSE 5432
