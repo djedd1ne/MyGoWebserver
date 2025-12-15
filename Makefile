@@ -36,9 +36,8 @@ psql:
 	docker exec -it $(CONTAINER_NAME) psql -U $(DB_USER) -d $(DB_NAME)
 
 docker-clean:
-	docker stop $(CONTAINER_NAME) || true
-	docker rm $(CONTAINER_NAME) || true
-	docker rmi $(IMAGE_NAME) || true
+	docker rm -f $(CONTAINER_NAME) || true
+	docker rmi -f $(IMAGE_NAME) || true
 
 clean: docker-clean
 	rm -f $(APP_NAME)

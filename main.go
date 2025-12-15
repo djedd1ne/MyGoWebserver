@@ -1,30 +1,22 @@
 package main
 
 import (
-    "fmt"
     "log"
-
-    "github/djedd1ne/MyGoWebserver/utils"
+    "net/http"
+    
+    "github.com/djedd1ne/MyGoWebserver/router"
+    "github.com/djedd1ne/MyGoWebserver/services"
+    "github.com/djedd1ne/MyGoWebserver/utils"
 )
 
-type Post struct {
-    ID    int    `db:"id"`
-    Title string `db:"title"`
-    Body  string `db:"body"`
-}
-
 func main() {
-    db := utils.GetConnection()
-    defer db.Close()
+    log.Println("In main app")
 
-    var posts []Post
-    err := db.Select(&posts, "SELECT * FROM posts")
-    if err != nil {
-        log.Fatal(err)
-    }
+    var dbconn = utils.GetConnection()
+    defer dbconn.Close()
+	services.SetDB(dbconn)
+	var appRouter = router.CreateRouter()
 
-    fmt.Println("Posts in database:")
-    for _, post := range posts {
-        fmt.Printf("ID: %d, Title: %s, Body: %s\n", post.ID, post.Title, post.Body)
-    }
+	log.Println("Listening on Port 8000")
+	log.Fatal(http.ListenAndServe(":8000", appRouter))
 }

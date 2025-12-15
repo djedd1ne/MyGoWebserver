@@ -1,4 +1,4 @@
-module github/djedd1ne/MyGoWebserver
+module github.com/djedd1ne/MyGoWebserver
 
 go 1.24.4
 
