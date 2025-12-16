@@ -73,6 +73,26 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func CreatePost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var post = models.GetPost()
+	var id int
+
+	_ = json.NewDecoder(r.Body).Decode(&post)
+
+	sqlStmt := `INSERT INTO posts(title, body) VALUES($1,$2) RETURNING id`
+	err := dbconn.QueryRow(sqlStmt, post.Title, post.Body).Scan(&id)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	post.ID = id
+	log.Println("New record ID is:", id)
+	json.NewEncoder(w).Encode(&post)
+}
+
 func SetDB(db *sqlx.DB) {
 	dbconn = db
 }
