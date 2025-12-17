@@ -113,6 +113,20 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&post)
 }
 
+func DeletePost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	id := 0
+	sqlStmt := `DELETE FROM posts WHERE id=$1 RETURNING id`
+	err := dbconn.QueryRow(sqlStmt, params["id"]).Scan(&id)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+	log.Println("Deleted record ID is:", id)
+	json.NewEncoder(w).Encode(id)
+}
+
 func SetDB(db *sqlx.DB) {
 	dbconn = db
 }

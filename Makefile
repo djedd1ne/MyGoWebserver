@@ -22,7 +22,7 @@ docker-build:
 docker-run: docker-build
 	docker run -d \
 		--name $(CONTAINER_NAME) \
-		-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
+		-e POSTGRES_PASSWORD=$(DB_PASSWORD) \
 		-p $(DB_PORT):5432 \
 		$(IMAGE_NAME)
 
