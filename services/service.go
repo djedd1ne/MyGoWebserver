@@ -93,6 +93,26 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&post)
 }
 
+func UpdatePost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	var post = models.GetPost()
+	_ = json.NewDecoder(r.Body).Decode(&post)
+	post.ID, _ = strconv.Atoi(params["id"])
+
+	id := 0
+	sqlStmt := `UPDATE posts SET title=$1, body=$2 WHERE id=$3 RETURNING id`
+	err := dbconn.QueryRow(sqlStmt, post.Title, post.Body, params["id"]).Scan(&id)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	log.Println("Updated record ID is:", id)
+	json.NewEncoder(w).Encode(&post)
+}
+
 func SetDB(db *sqlx.DB) {
 	dbconn = db
 }
