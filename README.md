@@ -35,7 +35,7 @@ Or manually:
 ```bash
 go mod tidy
 ```
-## Makefile Commands
+#### Makefile Commands
 
 | Command | Description |
 | :--- | :--- |
@@ -50,3 +50,14 @@ go mod tidy
 | `make docker-clean` | Remove container and image |
 | `make clean` | Remove container, image, and binary |
 | `make setup` | Build and run database, then wait for ready |
+
+## Run
+### 1.Start database
+```bash
+make docker-run
+```
+
+### 2.Run server
+```bash
+make run
+```
